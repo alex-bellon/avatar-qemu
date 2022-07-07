@@ -44,6 +44,10 @@
 #include "target/mips/cpu.h"
 #endif
 
+#ifdef TARGET_M68K
+#include "target/m68k/cpu.h"
+#endif
+
 //qapi imports
 #include "qapi/error.h"
 #include "qapi/qmp/qjson.h"
@@ -422,6 +426,8 @@ static void init_peripheral(QDict *device)
 static void set_entry_point(QDict *conf, ARMCPU *cpuu)
 #elif TARGET_MIPS
 static void set_entry_point(QDict *conf, MIPSCPU *cpuu)
+#elif TARGET_M68K
+static void set_entry_point(QDict *conf, M68kCPU *cpuu)
 #endif
 {
 #if defined(TARGET_ARM) || defined(TARGET_AARCH64)
@@ -439,6 +445,8 @@ static void set_entry_point(QDict *conf, MIPSCPU *cpuu)
     cpuu->env.thumb = (entry & 1) == 1 ? 1 : 0;
 #elif TARGET_MIPS
     //Not implemented yet
+#elif TARGET_M68K
+    cpuu->env.pc = entry;
 #endif
 
 }
@@ -541,8 +549,30 @@ static MIPSCPU *create_cpu(MachineState * ms, QDict *conf)
 
     return cpuu;
 }
-#endif
 
+#elif TARGET_M68K
+static M68kCPU *create_cpu(MachineState * ms, QDict *conf)
+{
+    const char *cpu_model = ms->cpu_type;
+    M68kCPU *cpuu;
+    CPUstate *cpu;
+
+    if (qdict_haskey(conf, "cpu_model")) {
+      cpu_type = qdict_get_str(conf, "cpu_model");
+      g_assert(cpu_model);
+    }
+   
+    if (!cpu_model) cpu_model = "m68k-generic"; // I made this up, idk
+
+    cpuu = m68k_cpu_initfn(); // I don't know if this is the generic version of the CPU init
+    // Actually I think I need to call
+    // m68k_cpu_class_by_name(cpu_model);
+    // But I don't know what to do with the ObjectClass I get back
+    // I thought I could use it to choose which m68040_cpu_initfn,
+    // etc to call but it looks like not
+}
+
+#endif
 
 static void board_init(MachineState * ms)
 {
