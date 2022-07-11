@@ -564,12 +564,20 @@ static M68kCPU *create_cpu(MachineState * ms, QDict *conf)
    
     if (!cpu_model) cpu_model = "m68k-generic"; // I made this up, idk
 
-    cpuu = m68k_cpu_initfn(); // I don't know if this is the generic version of the CPU init
-    // Actually I think I need to call
-    // m68k_cpu_class_by_name(cpu_model);
-    // But I don't know what to do with the ObjectClass I get back
-    // I thought I could use it to choose which m68040_cpu_initfn,
-    // etc to call but it looks like not
+    printf("Configurable: Adding processor %s\n", cpu_model);
+
+    cpuu = M68K_CPU(); // This will error but I can't find where the constructor is defined for the life of me
+
+    if (cpuu == NULL) {
+        fprintf(stderr, "Unable to find CPU definition\n");
+        exit(1);
+    }
+
+    cpu = (CPUState *) &(cpuu->env);
+    if (!cpu) {
+        fprintf(stderr, "Unable to find CPU definition\n");
+        exit(1);
+    }
 }
 
 #endif
@@ -580,6 +588,8 @@ static void board_init(MachineState * ms)
     ARMCPU *cpuu;
 #elif TARGET_MIPS
     MIPSCPU *cpuu;
+#elif TARGET_M68K
+    M68kCPU *cpuu;
 #endif
 
     QemuOpts *machine_opts;
