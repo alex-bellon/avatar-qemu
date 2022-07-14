@@ -16,7 +16,11 @@
 #if defined(TARGET_ARM) || defined(TARGET_AARCH64)
 #include "target/arm/cpu.h"
 #include "hw/avatar/halucinator_irq_memory.h"
-#elif TARGET_MIPS
+#elif defined(TARGET_MIPS)
+#include "target/mips/cpu.h"
+#elif defined(TARGET_M68K)
+#include "target/m68k/cpu.h"
+#include "hw/avatar/halucinator_irq_memory.h"
 #endif
 
 
@@ -38,7 +42,11 @@ static void update_irq(HalucinatorIRQState * s){
     }
 
     CPUState * cs = qemu_get_cpu(0);
+#if defined(TARGET_ARM) || defined(TARGET_AARCH64)
     ARMCPU * cpu = ARM_CPU(cs);
+#elif defined(TARGET_M68K)
+    M68kCPU * cpu = M68K_CPU(cs);
+#endif
     //DeviceState *dev = get_device_type(dev_name);
     //if (dev){
     printf("Updating IRQ State %i\n", val_set);

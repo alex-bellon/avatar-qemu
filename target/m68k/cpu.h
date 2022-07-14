@@ -173,6 +173,7 @@ int m68k_cpu_gdb_write_register(CPUState *cpu, uint8_t *buf, int reg);
 
 void m68k_tcg_init(void);
 void m68k_cpu_init_gdb(M68kCPU *cpu);
+M68kCPU *cpu_m68k_init(const char *cpu_model);
 /*
  * you can call this signal handler from your SIGBUS and SIGSEGV
  * signal handlers to inform the virtual CPU of exceptions. non zero
@@ -514,6 +515,8 @@ enum {
 
 #define cpu_signal_handler cpu_m68k_signal_handler
 #define cpu_list m68k_cpu_list
+
+#define cpu_init(cpu_model) CPU(cpu_m68k_init(cpu_model))
 
 /* MMU modes definitions */
 #define MMU_MODE0_SUFFIX _kernel

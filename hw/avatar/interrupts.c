@@ -9,11 +9,7 @@
 #include "hw/sysbus.h"
 #include "sysemu/sysemu.h"
 
-#ifdef TARGET_ARM
 #include "target/arm/cpu.h"
-#elif TARGET_MIPS
-#include "target/mips/cpu.h"
-#endif
 
 #include "hw/avatar/interrupts.h"
 #include "hw/avatar/avatar_posix.h"
@@ -34,12 +30,10 @@ static uint8_t ignore_irq_return_map[32] = {0};
 
 void qmp_avatar_armv7m_set_vector_table_base(int64_t num_cpu, int64_t base, Error **errp)
 {
-#ifdef TARGET_ARM
     qemu_log_mask(LOG_AVATAR, "Changing NVIC base to%lx\n", base & 0xffffff80);
     ARMCPU *armcpu = ARM_CPU(qemu_get_cpu(num_cpu));
     /* MM: qemu now has multiple vecbases, we may need to fix this */
     armcpu->env.v7m.vecbase[armcpu->env.v7m.secure] = base & 0xffffff80;
-#endif
 }
 
 
