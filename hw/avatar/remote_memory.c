@@ -29,7 +29,8 @@ uint64_t get_current_pc(void){
 #elif defined(TARGET_MIPS)
     return 0; /*  implement me */
 #elif defined(TARGET_M68K)
-    return 0; // TODO: implement
+    M68kCPU *cpu = M68K_CPU(qemu_get_cpu(0));
+    return cpu->env.pc;
 #endif
     return 0;
 }
