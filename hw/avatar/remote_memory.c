@@ -16,6 +16,7 @@
 #include "target/arm/cpu.h"
 #elif defined(TARGET_MIPS)
 #elif defined(TARGET_M68K)
+#include "target/m68k/cpu.h"
 #endif
 
 
