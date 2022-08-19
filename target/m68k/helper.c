@@ -157,7 +157,6 @@ M68kCPU *cpu_m68k_init(const char *cpu_model)
     CPUM68KState *env;
     ObjectClass *oc;
     
-    // TODO: might have to change this to m68k_cpu_class_by_name
     oc = cpu_class_by_name(TYPE_M68K_CPU, cpu_model);
     if (oc == NULL) {
         return NULL;

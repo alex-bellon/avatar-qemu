@@ -571,7 +571,7 @@ static M68kCPU *create_cpu(MachineState * ms, QDict *conf)
       g_assert(cpu_model);
     }
    
-    if (!cpu_model) cpu_model = "m68k-generic"; // I made this up, idk
+    if (!cpu_model) cpu_model = "m68000";
 
     printf("Configurable: Adding processor %s\n", cpu_model);
 
